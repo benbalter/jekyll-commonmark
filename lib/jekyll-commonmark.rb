@@ -3,7 +3,11 @@
 
 module Jekyll
   module Converters
-    class Markdown::CommonMark
+    class Markdown::CommonMark < Converter
+
+      safe true
+      priority :low
+
       def initialize(config)
         Jekyll::External.require_with_graceful_fail "commonmarker"
         begin
@@ -23,6 +27,14 @@ module Jekyll
 
       def convert(content)
         CommonMarker.render_doc(content, @options).to_html
+      end
+
+      def output_ext(ext)
+        ".html"
+      end
+
+      def matches(ext)
+        ext =~ /^\.upcase$/i
       end
     end
   end
